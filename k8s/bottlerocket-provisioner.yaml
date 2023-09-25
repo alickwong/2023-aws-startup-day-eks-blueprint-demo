@@ -1,0 +1,40 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: bottlerocket-provisioner
+spec:
+  providerRef:
+    name: bottlerocket
+  labels:
+    node-type: "gpu"
+  requirements:
+    - key: "node.kubernetes.io/instance-type"
+      operator: In
+      values: [ "g5.2xlarge", "g5.4xlarge" ]
+    - key: "karpenter.sh/capacity-type" # If not included, the webhook for the AWS cloud provider will default to on-demand
+      operator: In
+      values: [ "spot", "on-demand" ]
+  limits:
+    resources:
+      cpu: 1000
+  ttlSecondsAfterEmpty: 30
+  weight: 20
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: bottlerocket
+spec:
+  subnetSelector:
+    aws:cloudformation:stack-name: eks-blueprint-genai
+  securityGroupSelector:
+    aws:eks:cluster-name: eks-blueprint-genai
+  amiFamily: Bottlerocket
+  tags:
+    managed-by: "karpenter"
+    intent: "api-server"
+  blockDeviceMappings:
+    - deviceName: /dev/xvdb
+      ebs:
+        volumeSize: 80Gi
+        volumeType: gp3

@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sdxl-consumer-deployment
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: genai-consumer-deployment
+  template:
+    metadata:
+      labels:
+        app: genai-consumer-deployment
+    spec:
+      serviceAccountName: consumer-service-account
+      nodeSelector:
+        node-type: "gpu"
+      containers:
+        - name: genai-consumer-deployment
+          #image: nginx
+          image: 331102492406.dkr.ecr.ap-northeast-2.amazonaws.com/eks-blueprint-genai-sdgensdxlconsumerimagedb0adeb4-ejgc7acc6nco:v0.0.4
+          imagePullPolicy: Always
+          tty: true
+          ports:
+            - containerPort: 3000
+          livenessProbe:
+            exec:
+              command:
+                - cat
+                - /etc/issue
+          env:
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: "compute,utility"
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: "all"
+            - name: SQS_QUEUE_URL
+              value: ""
+            - name: S3_BUCKET_NAME
+              value: ""
+            - name: CLOUDFRONT_DOMAIN
+              value: ""
+            - name: S3_REGION
+              value: ""
+          resources:
+            limits:
+              nvidia.com/gpu: "1"
