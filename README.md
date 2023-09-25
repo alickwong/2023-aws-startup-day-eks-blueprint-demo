@@ -24,6 +24,8 @@ Update the following ENV Value in `genai-consumer-deployment.yaml`
 - CLOUDFRONT_DOMAIN
 - S3_REGION
 
+Update the `spec.containers.image`
+
 
 # Deploy
 ```angular2html

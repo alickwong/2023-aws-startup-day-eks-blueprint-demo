@@ -9,16 +9,16 @@ services:
       - ./output:/output
       - ~/.aws/:/root/.aws:ro
     environment:
-      - AWS_DEFAULT_REGION=ap-northeast-1
+      - AWS_DEFAULT_REGION=
       - CRYPTOGRAPHY_DONT_BUILD_RUST=1
       - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_$KEY=AWS_SECRET_ACCESS_KEY
       - AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN
       - AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
-      - SQS_QUEUE_URL=https://sqs.ap-northeast-2.amazonaws.com/331102492406/eks-blueprint-genai-EksBlueprintGenaiQueue389B6B16-F02v1WxFrE0x
-      - S3_BUCKET_NAME=file-share-hk
-      - CLOUDFRONT_DOMAIN=https://d2tv1i4j8433bp.cloudfront.net
-      - S3_REGION=ap-east-1
+      - SQS_QUEUE_URL=
+      - S3_BUCKET_NAME=
+      - CLOUDFRONT_DOMAIN=
+      - S3_REGION=
     tty: true
     deploy:
       resources:
